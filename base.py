@@ -17,7 +17,7 @@ from sqlalchemy.types import (
     TIMESTAMP, VARCHAR, BINARY, BOOLEAN, FLOAT, REAL)
 
 # Export connector version
-VERSION = (0, 1, 0, None)
+VERSION = (1, 0, 0, None)
 
 # Column spec
 colspecs = {}
@@ -149,6 +149,9 @@ class ClickHouseTypeCompiler(compiler.GenericTypeCompiler):
     def visit_ARRAY(self, type, **kw):
         return "Array(%s)" % type
 
+    def visit_BOOLEAN(self, type, **kw):
+        return "Bool(%s)" % type
+
 class ClickHouseDialect(default.DefaultDialect):
     name = 'clickhouse'
     supports_cast = True
@@ -243,6 +246,7 @@ class ClickHouseDialect(default.DefaultDialect):
                 #      'decimal(10,1)' -> decimal                
                 col_type = re.search(r'^\w+', r.type).group(0)
             try:
+                print(col_type)
                 coltype = ischema_names[col_type]
             except KeyError:
                 coltype = sqltypes.NullType
