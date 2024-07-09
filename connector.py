@@ -36,6 +36,11 @@ class BoolField(Field):
     db_type = 'Bool'
 
     def to_python(self, value, timezone_in_use):
+        if value == 'true':
+            return True
+        if value == 'false':
+            return False
+
         if isinstance(value, bool):
             return value
         elif isinstance(value, int):
@@ -46,6 +51,11 @@ class BoolField(Field):
         raise ValueError("Invalid value for BoolField: {} {} {}".format(value, type(value), timezone))
 
     def to_db_string(self, value, quote=True):
+        if value is True:
+            return 'true'
+        if value is False:
+            return 'false'
+
         return str(int(value))
 
 class ParamEscaper(object):
@@ -101,9 +111,6 @@ def create_ad_hoc_field(cls, db_type):
 
     if db_type == 'LowCardinality(String)':
         db_type = 'String'
-
-    if db_type == 'Bool':
-        db_type = 'UInt8'
 
     if db_type.startswith('DateTime'):
         db_type = 'DateTime'
