@@ -4,11 +4,11 @@ from os import path, getenv
 from setuptools import setup
 from codecs import open
 
-VERSION = [0, 1, 5]
+VERSION = [1, 0, 0]
 readme = open('README.rst').read()
 
 setup(
-    name='sqlalchemy-clickhouse',
+    name='sqlalchemy-clickhouse-bool',
     version='.'.join('%d' % v for v in VERSION[0:3]),
     description='ClickHouse SQLAlchemy Dialect',
     long_description = readme,
