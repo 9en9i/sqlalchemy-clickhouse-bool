@@ -17,7 +17,7 @@ from sqlalchemy.types import (
     TIMESTAMP, VARCHAR, BINARY, BOOLEAN, FLOAT, REAL)
 
 # Export connector version
-VERSION = (1, 0, 1, None)
+VERSION = (1, 0, 3, None)
 
 # Column spec
 colspecs = {}
@@ -32,7 +32,14 @@ ischema_names = {
     'Int32': INTEGER,
     'Int16': INTEGER,
     'Int8': INTEGER,
-    'Bool': Int8,
+
+    'Bool': BOOLEAN,
+    'bool': BOOLEAN,
+    'BOOL': BOOLEAN,
+    'Boolean': BOOLEAN,
+    'BOOLEAN': BOOLEAN,
+    'boolean': BOOLEAN,
+
     'UInt64': INTEGER,
     'UInt32': INTEGER,
     'UInt16': INTEGER,
@@ -243,7 +250,6 @@ class ClickHouseDialect(default.DefaultDialect):
                 #      'decimal(10,1)' -> decimal                
                 col_type = re.search(r'^\w+', r.type).group(0)
             try:
-                print(col_type)
                 coltype = ischema_names[col_type]
             except KeyError:
                 coltype = sqltypes.NullType
