@@ -32,6 +32,7 @@ ischema_names = {
     'Int32': INTEGER,
     'Int16': INTEGER,
     'Int8': INTEGER,
+    'Bool': BOOLEAN,
     'UInt64': INTEGER,
     'UInt32': INTEGER,
     'UInt16': INTEGER,
