@@ -30,6 +30,24 @@ class Error(Exception):
     """
     pass
 
+
+from infi.clickhouse_orm.fields import Field
+class BoolField(Field):
+    db_type = 'Bool'
+
+    def to_python(self, value, timezone_in_use):
+        if isinstance(value, bool):
+            return value
+        elif isinstance(value, int):
+            return bool(value)
+        elif isinstance(value, str):
+            return bool(int(value))
+
+        raise ValueError("Invalid value for BoolField: {} {} {}".format(value, type(value), timezone))
+
+    def to_db_string(self, value, quote=True):
+        return str(int(value))
+
 class ParamEscaper(object):
     def escape_args(self, parameters):
         if isinstance(parameters, dict):
@@ -101,6 +119,9 @@ def create_ad_hoc_field(cls, db_type):
     
     # Simple fields
     name = db_type + 'Field'
+    if name == 'BoolField':
+        return BoolField()
+
     if not hasattr(orm_fields, name):
         raise NotImplementedError('No field class for %s' % db_type)
     return getattr(orm_fields, name)()
