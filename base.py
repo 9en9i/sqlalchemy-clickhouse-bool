@@ -17,7 +17,7 @@ from sqlalchemy.types import (
     TIMESTAMP, VARCHAR, BINARY, BOOLEAN, FLOAT, REAL)
 
 # Export connector version
-VERSION = (1, 0, 0, None)
+VERSION = (1, 0, 1, None)
 
 # Column spec
 colspecs = {}
@@ -32,7 +32,7 @@ ischema_names = {
     'Int32': INTEGER,
     'Int16': INTEGER,
     'Int8': INTEGER,
-    'Bool': BOOLEAN,
+    'Bool': Int8,
     'UInt64': INTEGER,
     'UInt32': INTEGER,
     'UInt16': INTEGER,
@@ -148,9 +148,6 @@ class ClickHouseExecutionContext(default.DefaultExecutionContext):
 class ClickHouseTypeCompiler(compiler.GenericTypeCompiler):
     def visit_ARRAY(self, type, **kw):
         return "Array(%s)" % type
-
-    def visit_BOOLEAN(self, type, **kw):
-        return "Bool(%s)" % type
 
 class ClickHouseDialect(default.DefaultDialect):
     name = 'clickhouse'
