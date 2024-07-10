@@ -17,7 +17,7 @@ from sqlalchemy.types import (
     TIMESTAMP, VARCHAR, BINARY, BOOLEAN, FLOAT, REAL)
 
 # Export connector version
-VERSION = (1, 0, 7, None)
+VERSION = (1, 0, 8, None)
 
 # Column spec
 colspecs = {}

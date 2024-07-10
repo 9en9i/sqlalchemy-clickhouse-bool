@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
+from os import path, getenv
+from setuptools import setup
 from codecs import open
 
-from setuptools import setup
-
-VERSION = [1, 0, 7]
+VERSION = [1, 0, 8]
 readme = open('README.rst').read()
 
 setup(

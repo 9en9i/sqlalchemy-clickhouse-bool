@@ -6,15 +6,14 @@
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
-
 import re
 import uuid
+import requests
+from infi.clickhouse_orm.models import ModelBase
+from infi.clickhouse_orm.database import Database
 from datetime import datetime
 
-from infi.clickhouse_orm.database import Database
-from infi.clickhouse_orm.models import ModelBase
-
-from custom_fields import BoolField
+# PEP 249 module globals
 
 # PEP 249 module globals
 apilevel = '2.0'
