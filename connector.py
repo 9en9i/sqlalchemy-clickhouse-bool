@@ -6,12 +6,15 @@
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
+
 import re
 import uuid
-import requests
-from infi.clickhouse_orm.models import ModelBase
-from infi.clickhouse_orm.database import Database
 from datetime import datetime
+
+from infi.clickhouse_orm.database import Database
+from infi.clickhouse_orm.models import ModelBase
+
+from custom_fields import BoolField
 
 # PEP 249 module globals
 apilevel = '2.0'
@@ -24,39 +27,13 @@ try:
 except NameError:
     basestring = str
 
+
 class Error(Exception):
     """Exception that is the base class of all other error exceptions.
     You can use this to catch all errors with one single except statement.
     """
     pass
 
-
-from infi.clickhouse_orm.fields import Field
-class BoolField(Field):
-    db_type = 'Bool'
-
-    def to_python(self, value, timezone_in_use):
-        if value == 'true':
-            return True
-        if value == 'false':
-            return False
-
-        if isinstance(value, bool):
-            return value
-        elif isinstance(value, int):
-            return bool(value)
-        elif isinstance(value, str):
-            return bool(int(value))
-
-        raise ValueError("Invalid value for BoolField: {} {} {}".format(value, type(value), timezone))
-
-    def to_db_string(self, value, quote=True):
-        if value is True:
-            return 'true'
-        if value is False:
-            return 'false'
-
-        return str(int(value))
 
 class ParamEscaper(object):
     def escape_args(self, parameters):
@@ -91,7 +68,9 @@ class ParamEscaper(object):
         else:
             raise Exception("Unsupported object {}".format(item))
 
+
 _escaper = ParamEscaper()
+
 
 # Patch ORM library
 @classmethod
@@ -100,10 +79,10 @@ def create_ad_hoc_field(cls, db_type):
 
     # Enums
     if db_type.startswith('Enum'):
-        db_type = 'String' # enum.Eum is not comparable
+        db_type = 'String'  # enum.Eum is not comparable
     # Arrays
     if db_type.startswith('Array'):
-        inner_field = cls.create_ad_hoc_field(db_type[6 : -1])
+        inner_field = cls.create_ad_hoc_field(db_type[6: -1])
         return orm_fields.ArrayField(inner_field)
     # FixedString
     if db_type.startswith('FixedString'):
@@ -116,25 +95,30 @@ def create_ad_hoc_field(cls, db_type):
         db_type = 'DateTime'
 
     if db_type.startswith('Nullable'):
-        inner_field = cls.create_ad_hoc_field(db_type[9 : -1])
+        inner_field = cls.create_ad_hoc_field(db_type[9: -1])
         return orm_fields.NullableField(inner_field)
-   
+
     # db_type for Deimal comes like 'Decimal(P, S) string where P is precision and S is scale'
     if db_type.startswith('Decimal'):
         nums = [int(n) for n in db_type[8:-1].split(',')]
         return orm_fields.DecimalField(nums[0], nums[1])
-    
+
     # Simple fields
     name = db_type + 'Field'
+
     if name == 'BoolField':
         return BoolField()
 
     if not hasattr(orm_fields, name):
         raise NotImplementedError('No field class for %s' % db_type)
     return getattr(orm_fields, name)()
+
+
 ModelBase.create_ad_hoc_field = create_ad_hoc_field
 
 from six import PY3, string_types
+
+
 def _send(self, data, settings=None, stream=False):
     if PY3 and isinstance(data, string_types):
         data = data.encode('utf-8')
@@ -143,7 +127,10 @@ def _send(self, data, settings=None, stream=False):
     if r.status_code != 200:
         raise Exception(r.text)
     return r
+
+
 Database._send = _send
+
 
 #
 # Connector interface
@@ -152,11 +139,14 @@ Database._send = _send
 def connect(*args, **kwargs):
     return Connection(*args, **kwargs)
 
+
 class Connection(Database):
     """
         These objects are small stateless factories for cursors, which do all the real work.
     """
-    def __init__(self, db_name, db_url='http://localhost:8123/', username=None, password=None, readonly=False, ssl="False"):
+
+    def __init__(self, db_name, db_url='http://localhost:8123/', username=None, password=None, readonly=False,
+                 ssl="False"):
         if ssl.upper() == "TRUE":
             db_url = db_url.replace("http", "https")
         elif ssl.upper() == "FALSE":
@@ -181,6 +171,7 @@ class Connection(Database):
 
     def rollback(self):
         raise NotSupportedError("Transactions are not supported")  # pragma: no cover
+
 
 class Cursor(object):
     """These objects represent a database cursor, which is used to manage the context of a fetch
@@ -379,7 +370,7 @@ class Cursor(object):
             assert self._state == self._STATE_FINISHED, "Query should be finished"
             return
         # Replace current running query to cancel it
-        self._db.select("SELECT 1", settings={"query_id":self._uuid})
+        self._db.select("SELECT 1", settings={"query_id": self._uuid})
         self._state = self._STATE_FINISHED
         self._uuid = None
         self._data = None

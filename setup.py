@@ -1,24 +1,24 @@
 #!/usr/bin/env python
 
-from os import path, getenv
-from setuptools import setup
 from codecs import open
 
-VERSION = [1, 0, 6]
+from setuptools import setup
+
+VERSION = [1, 0, 7]
 readme = open('README.rst').read()
 
 setup(
     name='sqlalchemy-clickhouse-bool',
     version='.'.join('%d' % v for v in VERSION[0:3]),
     description='ClickHouse SQLAlchemy Dialect',
-    long_description = readme,
-    author = 'Cloudflare, Inc.',
-    author_email = 'mvavrusa@cloudflare.com',
-    license = 'Apache License, Version 2.0',
-    url = 'https://github.com/cloudflare/sqlalchemy-clickhouse',
-    keywords = "db database cloud analytics clickhouse",
-    download_url = 'https://github.com/cloudflare/sqlalchemy-clickhouse/releases/tag/v0.1.5',
-    install_requires = [
+    long_description=readme,
+    author='Cloudflare, Inc.',
+    author_email='mvavrusa@cloudflare.com',
+    license='Apache License, Version 2.0',
+    url='https://github.com/cloudflare/sqlalchemy-clickhouse',
+    keywords="db database cloud analytics clickhouse",
+    download_url='https://github.com/cloudflare/sqlalchemy-clickhouse/releases/tag/v0.1.5',
+    install_requires=[
         'sqlalchemy>=1.0.0',
         'infi.clickhouse_orm>=1.2.0'
     ],
@@ -36,7 +36,7 @@ setup(
             'clickhouse=sqlalchemy_clickhouse.base',
         ]
     },
-    classifiers = [
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
 
         'Environment :: Console',

@@ -17,7 +17,7 @@ from sqlalchemy.types import (
     TIMESTAMP, VARCHAR, BINARY, BOOLEAN, FLOAT, REAL)
 
 # Export connector version
-VERSION = (1, 0, 6, None)
+VERSION = (1, 0, 7, None)
 
 # Column spec
 colspecs = {}
@@ -32,14 +32,6 @@ ischema_names = {
     'Int32': INTEGER,
     'Int16': INTEGER,
     'Int8': INTEGER,
-
-    'Bool': BOOLEAN,
-    'bool': BOOLEAN,
-    'BOOL': BOOLEAN,
-    'Boolean': BOOLEAN,
-    'BOOLEAN': BOOLEAN,
-    'boolean': BOOLEAN,
-
     'UInt64': INTEGER,
     'UInt32': INTEGER,
     'UInt16': INTEGER,
@@ -55,6 +47,7 @@ ischema_names = {
     'Enum16': VARCHAR,
     'Array': ARRAY,
     'Decimal': DECIMAL,
+    'Bool': BOOLEAN,
 }
 
 class ClickHouseIdentifierPreparer(PGIdentifierPreparer):
