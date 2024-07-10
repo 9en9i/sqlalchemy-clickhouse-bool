@@ -13,8 +13,6 @@ from infi.clickhouse_orm.models import ModelBase
 from infi.clickhouse_orm.database import Database
 from datetime import datetime
 
-from custom_fields import BoolField
-
 # PEP 249 module globals
 
 # PEP 249 module globals
@@ -28,6 +26,28 @@ try:
 except NameError:
     basestring = str
 
+
+from infi.clickhouse_orm.fields import Field
+
+
+class BoolField(Field):
+    db_type = 'Bool'
+
+    def to_python(self, value, timezone_in_use):
+        if value == 'true':
+            return True
+        elif value == 'false':
+            return False
+        else:
+            raise ValueError('Invalid value for BoolField: ' + value)
+
+    def to_db_string(self, value, quote=True):
+        if value is True:
+            return 'true'
+        elif value is False:
+            return 'false'
+        else:
+            raise ValueError('Invalid value for BoolField: ' + str(value))
 
 class Error(Exception):
     """Exception that is the base class of all other error exceptions.
