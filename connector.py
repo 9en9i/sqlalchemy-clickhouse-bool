@@ -13,6 +13,8 @@ from infi.clickhouse_orm.models import ModelBase
 from infi.clickhouse_orm.database import Database
 from datetime import datetime
 
+from custom_fields import BoolField
+
 # PEP 249 module globals
 
 # PEP 249 module globals
