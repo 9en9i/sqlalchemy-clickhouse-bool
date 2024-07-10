@@ -34,18 +34,18 @@ class BoolField(Field):
     db_type = 'Bool'
 
     def to_python(self, value, timezone_in_use):
-        if value == 'true':
+        if value == 1:
             return True
-        elif value == 'false':
+        elif value == 0:
             return False
         else:
-            raise ValueError('Invalid value for BoolField: ' + value)
+            raise ValueError('Invalid value for BoolField: ' + str(value))
 
     def to_db_string(self, value, quote=True):
         if value is True:
-            return 'true'
+            return 1
         elif value is False:
-            return 'false'
+            return 0
         else:
             raise ValueError('Invalid value for BoolField: ' + str(value))
 
