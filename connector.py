@@ -27,7 +27,7 @@ except NameError:
     basestring = str
 
 
-from infi.clickhouse_orm.fields import Field
+from infi.clickhouse_orm.fields import Field, IPv4Field
 
 
 class BoolField(Field):
@@ -129,6 +129,9 @@ def create_ad_hoc_field(cls, db_type):
 
     if name == 'BoolField':
         return BoolField()
+
+    if name == 'IPv4Field':
+        return IPv4Field()
 
     if not hasattr(orm_fields, name):
         raise NotImplementedError('No field class for %s' % db_type)

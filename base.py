@@ -11,13 +11,14 @@ from sqlalchemy import util as sa_util
 from sqlalchemy.engine import default, reflection
 from sqlalchemy.sql import compiler, expression
 from sqlalchemy.sql.elements import quoted_name
+from sqlalchemy_utils import types as utils_types
 from sqlalchemy.dialects.postgresql.base import PGCompiler, PGIdentifierPreparer
 from sqlalchemy.types import (
     CHAR, DATE, DATETIME, INTEGER, SMALLINT, BIGINT, DECIMAL, TIME,
     TIMESTAMP, VARCHAR, BINARY, BOOLEAN, FLOAT, REAL)
 
 # Export connector version
-VERSION = (1, 1, 3, None)
+VERSION = (1, 2, 0, None)
 
 # Column spec
 colspecs = {}
@@ -48,6 +49,7 @@ ischema_names = {
     'Array': ARRAY,
     'Decimal': DECIMAL,
     'Bool': BOOLEAN,
+    'IPv4': utils_types.ip_address.IPAddressType,
 }
 
 class ClickHouseIdentifierPreparer(PGIdentifierPreparer):
